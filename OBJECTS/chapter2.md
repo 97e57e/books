@@ -23,3 +23,35 @@
 코드의 의존성과 실행 시점의 의존성이 서로 다를 수 있다. 다시 말해 클래스 사이의 의존성과 객체 사이의 의존성을 동일하지 않을 수 있다.<br>
 코드의 의존성과 실행 시점의 의존성이 다르면 다를수록 코드를 이해하기 어려워진다. 코드뿐만 아니라 객체를 생성하고 연결하는 부분을 찾아야 하기 때문이다.<br>
 **의존성과 양면성은 설계가 트레이드오프의 산물이라는 사실을 잘 보여준다.**
+
+<br>
+
+추상화를 이용해 상위 정책을 기술한다는 것은 기본적인 애플리케이션의 협력 흐름을 기술한다는것을 의미한다.<br>
+재사용 가능한 설계의 기본을 이루는 디자인패턴이나 프레임워크 모두 추상화를 이용해 상위 정책을 정의하는 객체지향의 메커니즘을 활용하고 있다.
+
+<br>
+
+예외 케이스를 최소화하고 일관성을 유지할 수 있는 방법을 선택하라.
+
+- 예외 케이스
+```Java
+public class Movie {
+    public Money calculateMovieFee(Screening screening) {
+        if (discountPolicy == null) {
+            return fee;
+        }
+
+        return fee.minus(discountPolicy.calculateDiscountAmount(screnning));
+    }
+}
+
+```
+- 예외 케이스를 처리하기 위한 새로운 클래스
+```Java
+public class NoneDiscountPolicy extends DiscountPolicy {
+    @Override
+    protected Money getDiscountAmount(Screening screening) {
+        return Money.ZERO;
+    }
+}
+```
